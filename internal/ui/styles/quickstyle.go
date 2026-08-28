@@ -631,17 +631,16 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Tool.ParamKey = subtle
 
 	// Content rendering - prepared styles that accept width parameter
-	s.Tool.ContentLine = muted.Background(o.bgLeastVisible)
-	s.Tool.ContentTruncation = muted.Background(o.bgLeastVisible)
-	s.Tool.ContentCodeLine = base.Background(o.bgBase).PaddingLeft(2)
-	s.Tool.ContentCodeTruncation = muted.Background(o.bgBase).PaddingLeft(2)
-	s.Tool.ContentCodeBg = o.bgBase
+	s.Tool.ContentLine = muted
+	s.Tool.ContentTruncation = muted
+	s.Tool.ContentCodeLine = base.PaddingLeft(2)
+	s.Tool.ContentCodeTruncation = muted.PaddingLeft(2)
 	s.Tool.Body = base.PaddingLeft(2)
 
 	// Deprecated - kept for backward compatibility
 	s.Tool.ContentBg = muted.Background(o.bgLeastVisible)
 	s.Tool.ContentText = muted
-	s.Tool.ContentLineNumber = base.Foreground(o.fgMoreSubtle).Background(o.bgBase).PaddingRight(1).PaddingLeft(1)
+	s.Tool.ContentLineNumber = base.Foreground(o.fgMoreSubtle).PaddingRight(1).PaddingLeft(1)
 
 	s.Tool.StateWaiting = base.Foreground(o.fgMostSubtle)
 	s.Tool.StateCancelled = base.Foreground(o.fgMostSubtle)
