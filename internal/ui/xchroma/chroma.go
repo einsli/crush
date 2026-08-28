@@ -45,7 +45,7 @@ func MatchLexer(fileName string) chroma.Lexer {
 }
 
 // Formatter is func that returns a custom formatter for Chroma that uses
-// Lip Gloss for foreground styling, while keeping a forced background color.
+// Lip Gloss for foreground styling and an optional background color.
 func Formatter(bgColor color.Color, processValue func(string) string) chroma.Formatter {
 	return chroma.FormatterFunc(func(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
 		for token := it(); token != chroma.EOF; token = it() {
@@ -62,8 +62,10 @@ func Formatter(bgColor color.Color, processValue func(string) string) chroma.For
 				continue
 			}
 
-			s := lipgloss.NewStyle().
-				Background(bgColor)
+			s := lipgloss.NewStyle()
+			if bgColor != nil {
+				s = s.Background(bgColor)
+			}
 
 			if entry.Bold == chroma.Yes {
 				s = s.Bold(true)

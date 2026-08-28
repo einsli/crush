@@ -5,7 +5,6 @@ import (
 	"image/color"
 
 	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/formatters"
 	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/charmbracelet/crush/internal/ui/xchroma"
@@ -42,12 +41,6 @@ func SyntaxHighlightLexerName(st *styles.Styles, source, lexerName string, bg co
 // syntaxHighlight formats the given source using the provided lexer and the
 // memoized Chroma style for the theme and background.
 func syntaxHighlight(st *styles.Styles, source string, l chroma.Lexer, bg color.Color) (string, error) {
-	// Get the formatter
-	f := formatters.Get("terminal16m")
-	if f == nil {
-		f = formatters.Fallback
-	}
-
 	// Memoized: building the style per call is expensive and only depends
 	// on the theme and background.
 	s := ChromaStyle(st, bg)
@@ -59,6 +52,6 @@ func syntaxHighlight(st *styles.Styles, source string, l chroma.Lexer, bg color.
 	}
 
 	var buf bytes.Buffer
-	err = f.Format(&buf, s, it)
+	err = xchroma.Formatter(bg, nil).Format(&buf, s, it)
 	return buf.String(), err
 }

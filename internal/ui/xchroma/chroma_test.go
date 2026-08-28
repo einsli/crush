@@ -43,3 +43,19 @@ func TestFormatterPreservesIndentationAfterComments(t *testing.T) {
 		})
 	}
 }
+
+func TestFormatterSupportsTransparentBackground(t *testing.T) {
+	t.Parallel()
+
+	lexer := chroma.Coalesce(MatchLexer("file.yaml"))
+	require.NotNil(t, lexer)
+	it, err := lexer.Tokenise(nil, "enabled: true\n")
+	require.NoError(t, err)
+
+	var buf bytes.Buffer
+	require.NoError(t, Formatter(nil, nil).Format(&buf, styles.Get("charm"), it))
+
+	rendered := buf.String()
+	require.Contains(t, rendered, "\x1b[")
+	require.NotContains(t, rendered, "\x1b[48;")
+}
