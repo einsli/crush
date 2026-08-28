@@ -655,54 +655,30 @@ func quickStyle(o quickStyleOpts) Styles {
 
 	s.Diff = diffview.Style{
 		DividerLine: diffview.LineStyle{
-			LineNumber: lipgloss.NewStyle().
-				Foreground(o.fgSubtle).
-				Background(o.bgLeastVisible),
-			Code: lipgloss.NewStyle().
-				Foreground(o.fgSubtle).
-				Background(o.bgLeastVisible),
+			LineNumber: lipgloss.NewStyle().Foreground(o.fgSubtle),
+			Code:       lipgloss.NewStyle().Foreground(o.fgSubtle),
 		},
 		MissingLine: diffview.LineStyle{
-			LineNumber: lipgloss.NewStyle().
-				Background(o.bgLeastVisible),
-			Code: lipgloss.NewStyle().
-				Background(o.bgLeastVisible),
+			LineNumber: lipgloss.NewStyle(),
+			Code:       lipgloss.NewStyle(),
 		},
 		EqualLine: diffview.LineStyle{
-			LineNumber: lipgloss.NewStyle().
-				Foreground(o.fgMoreSubtle).
-				Background(o.bgBase),
-			Code: lipgloss.NewStyle().
-				Foreground(o.fgMoreSubtle).
-				Background(o.bgBase),
+			LineNumber: lipgloss.NewStyle().Foreground(o.fgMoreSubtle),
+			Code:       lipgloss.NewStyle().Foreground(o.fgMoreSubtle),
 		},
 		InsertLine: diffview.LineStyle{
-			LineNumber: lipgloss.NewStyle().
-				Foreground(o.diffInsertFg).
-				Background(o.diffInsertGutterBg),
-			Symbol: lipgloss.NewStyle().
-				Foreground(o.diffInsertFg).
-				Background(o.diffInsertCodeBg),
-			Code: lipgloss.NewStyle().
-				Background(o.diffInsertCodeBg),
+			LineNumber: lipgloss.NewStyle().Foreground(o.diffInsertFg),
+			Symbol:     lipgloss.NewStyle().Foreground(o.diffInsertFg),
+			Code:       lipgloss.NewStyle(),
 		},
 		DeleteLine: diffview.LineStyle{
-			LineNumber: lipgloss.NewStyle().
-				Foreground(o.diffDeleteFg).
-				Background(o.diffDeleteGutterBg),
-			Symbol: lipgloss.NewStyle().
-				Foreground(o.diffDeleteFg).
-				Background(o.diffDeleteCodeBg),
-			Code: lipgloss.NewStyle().
-				Background(o.diffDeleteCodeBg),
+			LineNumber: lipgloss.NewStyle().Foreground(o.diffDeleteFg),
+			Symbol:     lipgloss.NewStyle().Foreground(o.diffDeleteFg),
+			Code:       lipgloss.NewStyle(),
 		},
 		Filename: diffview.LineStyle{
-			LineNumber: lipgloss.NewStyle().
-				Foreground(o.fgSubtle).
-				Background(o.bgLeastVisible),
-			Code: lipgloss.NewStyle().
-				Foreground(o.fgSubtle).
-				Background(o.bgLeastVisible),
+			LineNumber: lipgloss.NewStyle().Foreground(o.fgSubtle),
+			Code:       lipgloss.NewStyle().Foreground(o.fgSubtle),
 		},
 	}
 
@@ -761,7 +737,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Tool.Body = base.PaddingLeft(2)
 
 	// Deprecated - kept for backward compatibility
-	s.Tool.ContentBg = muted.Background(o.bgLeastVisible)
+	s.Tool.ContentBg = muted
 	s.Tool.ContentText = muted
 	s.Tool.ContentLineNumber = base.Foreground(o.fgMoreSubtle).PaddingRight(1).PaddingLeft(1)
 
@@ -775,7 +751,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Tool.WarnMessage = base.Foreground(o.fgSubtle)
 
 	// Diff and multi-edit styles
-	s.Tool.DiffTruncation = muted.Background(o.bgLeastVisible).PaddingLeft(2)
+	s.Tool.DiffTruncation = muted.PaddingLeft(2)
 	s.Tool.NoteTag = base.Padding(0, 1).Background(o.info).Foreground(o.onPrimary)
 	s.Tool.NoteMessage = base.Foreground(o.fgSubtle)
 
@@ -1053,7 +1029,7 @@ func quickStyle(o quickStyleOpts) Styles {
 		Padding(1, 2)
 
 	// Thinking section styles
-	s.Messages.ThinkingBox = subtle.Background(o.bgLeastVisible)
+	s.Messages.ThinkingBox = subtle
 	s.Messages.ThinkingTruncationHint = muted
 	s.Messages.ThinkingFooterTitle = muted
 	s.Messages.ThinkingFooterDuration = subtle
@@ -1082,7 +1058,6 @@ func quickStyle(o quickStyleOpts) Styles {
 	// Dialog.Permissions
 	s.Dialog.Permissions.KeyText = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
 	s.Dialog.Permissions.ValueText = lipgloss.NewStyle().Foreground(o.fgBase)
-	s.Dialog.Permissions.ParamsBg = o.bgLessVisible
 
 	// Dialog.Quit
 	s.Dialog.Quit.Content = lipgloss.NewStyle().Foreground(o.fgBase)
@@ -1104,8 +1079,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Dialog.InputPrompt = base.Margin(1, 1)
 
 	s.Dialog.List = base.Margin(0, 0, 1, 0)
-	s.Dialog.ContentPanel = base.Background(o.bgLessVisible).Foreground(o.fgBase).Padding(1, 2)
-	s.Dialog.ContentPanelBg = o.bgLessVisible
+	s.Dialog.ContentPanel = base.Foreground(o.fgBase).Padding(1, 2)
 	s.Dialog.Spinner = base.Foreground(o.secondary)
 	s.Dialog.ScrollbarThumb = base.Foreground(o.secondary)
 	s.Dialog.ScrollbarTrack = base.Foreground(o.separator)
