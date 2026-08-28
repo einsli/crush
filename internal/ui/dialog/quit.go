@@ -108,9 +108,7 @@ func (q *Quit) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 		{Text: "Yep!", Selected: !q.selectedNo, Padding: 3},
 		{Text: "Nope", Selected: q.selectedNo, Padding: 3},
 	}
-	buttonStyles := *q.com.Styles
-	buttonStyles.Button.Blurred = buttonStyles.Button.Blurred.UnsetBackground()
-	buttons := common.ButtonGroup(&buttonStyles, buttonOpts, " ")
+	buttons := common.ButtonGroup(q.com.Styles, buttonOpts, " ")
 	content := baseStyle.Render(
 		lipgloss.JoinVertical(
 			lipgloss.Center,
