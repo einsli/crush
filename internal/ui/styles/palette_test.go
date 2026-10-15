@@ -135,14 +135,19 @@ func TestPalette_JSON_DiffFields(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "#112233", colorToHex(styles.Diff.InsertLine.Symbol.GetForeground()))
 	require.Equal(t, "#112233", colorToHex(styles.Diff.InsertLine.LineNumber.GetForeground()))
-	require.Equal(t, "#223344", colorToHex(styles.Diff.InsertLine.Code.GetBackground()))
-	require.Equal(t, "#223344", colorToHex(styles.Diff.InsertLine.Symbol.GetBackground()))
-	require.Equal(t, "#334455", colorToHex(styles.Diff.InsertLine.LineNumber.GetBackground()))
 	require.Equal(t, "#445566", colorToHex(styles.Diff.DeleteLine.Symbol.GetForeground()))
 	require.Equal(t, "#445566", colorToHex(styles.Diff.DeleteLine.LineNumber.GetForeground()))
-	require.Equal(t, "#556677", colorToHex(styles.Diff.DeleteLine.Code.GetBackground()))
-	require.Equal(t, "#556677", colorToHex(styles.Diff.DeleteLine.Symbol.GetBackground()))
-	require.Equal(t, "#667788", colorToHex(styles.Diff.DeleteLine.LineNumber.GetBackground()))
+
+	for _, style := range []lipgloss.Style{
+		styles.Diff.InsertLine.Code,
+		styles.Diff.InsertLine.Symbol,
+		styles.Diff.InsertLine.LineNumber,
+		styles.Diff.DeleteLine.Code,
+		styles.Diff.DeleteLine.Symbol,
+		styles.Diff.DeleteLine.LineNumber,
+	} {
+		require.Equal(t, lipgloss.NoColor{}, style.GetBackground())
+	}
 }
 
 func TestPalette_JSON_OmitsEmpty(t *testing.T) {
@@ -225,25 +230,22 @@ func luminance(s string) float64 {
 	return float64(r+g+b) / 3
 }
 
-func TestLoadPaletteTheme_BgBaseOverrideDerivesDiffTints(t *testing.T) {
+func TestLoadPaletteTheme_DiffBackgroundsRemainTransparent(t *testing.T) {
 	t.Parallel()
 
-	// Regression: derived diff backgrounds used to be baked into the
-	// base palette before user overrides merged, so overriding bg_base
-	// on a dark built-in theme kept the built-in theme's dark tints.
-	builtin := quickStyle(charmtoneOpts())
-	light, err := LoadPaletteTheme("charmtone-panther", Palette{BgBase: "#ffffff"})
+	styles, err := LoadPaletteTheme("charmtone-panther", Palette{BgBase: "#ffffff"})
 	require.NoError(t, err)
 
-	builtinInsert := colorToHex(builtin.Diff.InsertLine.Code.GetBackground())
-	builtinDelete := colorToHex(builtin.Diff.DeleteLine.Code.GetBackground())
-	insert := colorToHex(light.Diff.InsertLine.Code.GetBackground())
-	del := colorToHex(light.Diff.DeleteLine.Code.GetBackground())
-
-	require.NotEqual(t, builtinInsert, insert, "insert background should re-derive from the overridden bg_base")
-	require.NotEqual(t, builtinDelete, del, "delete background should re-derive from the overridden bg_base")
-	require.Greater(t, luminance(insert), 180.0, "insert background on white should be light, got %s", insert)
-	require.Greater(t, luminance(del), 180.0, "delete background on white should be light, got %s", del)
+	for _, style := range []lipgloss.Style{
+		styles.Diff.InsertLine.Code,
+		styles.Diff.InsertLine.Symbol,
+		styles.Diff.InsertLine.LineNumber,
+		styles.Diff.DeleteLine.Code,
+		styles.Diff.DeleteLine.Symbol,
+		styles.Diff.DeleteLine.LineNumber,
+	} {
+		require.Equal(t, lipgloss.NoColor{}, style.GetBackground())
+	}
 }
 
 func TestLoadPaletteTheme_SuccessOverrideDerivesDiffInsertFg(t *testing.T) {
